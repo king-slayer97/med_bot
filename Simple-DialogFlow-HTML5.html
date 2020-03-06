@@ -5,8 +5,8 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 	<script type="text/javascript">
-		var accessToken ="INSERT DIALOGFLOW ACCESS TOKEN HERE";
-		var baseUrl = "https://api.dialogflow.com/v1/";
+		var accessToken ="50dfdaa11ccf4184926aaf3d124f10ae";
+		var baseUrl = "https://api.api.ai/api/";
 		$(document).ready(function() {
 			$("#botInput").keypress(function(event) {
 				if (event.which == 13) {
@@ -71,7 +71,7 @@
 				headers: {
 					"Authorization": "Bearer " + accessToken
 				},
-				data: JSON.stringify({ query: text, lang: "en", sessionId: "SOMETHINGRANDOM" }),
+				data: JSON.stringify({ query: text, lang: "en", sessionId: "999999999" }),
 				success: function(data) {
 					var respText = data.result.fulfillment.speech;
 					console.log("Respuesta: " + respText);
