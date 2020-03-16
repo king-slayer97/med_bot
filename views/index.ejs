@@ -5,7 +5,8 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 	<script type="text/javascript">
-		var accessToken ="50dfdaa11ccf4184926aaf3d124f10ae";
+		var accessToken ="d32acb5e4f544fee9e7473afb1b59d6f";
+		var query;
 		var baseUrl = "https://api.api.ai/api/";
 		$(document).ready(function() {
 			$("#botInput").keypress(function(event) {
@@ -74,7 +75,7 @@
 				data: JSON.stringify({ query: text, lang: "en", sessionId: "999999999" }),
 				success: function(data) {
 					var respText = data.result.fulfillment.speech;
-					console.log("Respuesta: " + respText);
+					console.log("Response: " + respText);
 					setResponse(respText);
 				},
 				error: function() {
@@ -82,8 +83,48 @@
 				}
 			});
 		}
+
+		function sendButton(p,q){
+			$.ajax({
+				type: "POST",
+				url: baseUrl + "query?v=20150910",
+				contentType: "application/json; charset=utf-8",
+				dataType: "json",
+				headers: {
+					"Authorization": "Bearer " + accessToken
+				},
+				data: JSON.stringify({ query: p+' of '+q, lang: "en", sessionId: "999999999" }),
+				success: function(data) {
+					var respText = data.result.fulfillment.speech;
+					console.log("Response: " + respText);
+					setResponse(respText);
+				},
+				error: function() {
+					setResponse("Internal Server Error");
+				}
+			});
+		}
+
+		function f(p){
+			query = p;
+			$('.del').hide()
+			setResponse(p);
+			setResponse("Please enter the name of the medicine below");
+			// sendButton(p)
+		}
+
+		function m(p){
+			query = query +' of '+p;
+
+		}
+
 		function setResponse(val) {
-			conversation.push('<span class="botReplyBot"><span class="botIdBot">sAmI:</span><span class="botMsgBot">' + val + '</span></span>'); //div
+			if(val.startsWith('Which of the following medicines')){
+				var txt= ''
+				conversation.push('<span class="botReplyBot"><span class="botIdBot">sAmI:</span><span class="botMsgBot">' + txt + '</span></span>');
+			}
+			else{
+			conversation.push('<span class="botReplyBot"><span class="botIdBot">sAmI:</span><span class="botMsgBot">' + val + '</span></span>');} //div}
 			$("#response").html(conversation.join("")); //div
 			$("#response-container").scrollTop($("#response").height());
 			$("#response .botReplyUser").removeClass("botReplyUserCurrent");
@@ -94,7 +135,7 @@
 		var conversation = [];
 	</script>
 	<style type="text/css">
-		.bot{width:340px; height:340px; padding:5px; border-radius:5px; border:1px solid #eee; background:#fff; overflow:hidden;}
+		.bot{width:340px; height:710px; padding:5px; border-radius:5px; border:1px solid #eee; background:#fff; overflow:hidden;}
 		.bot #response-container{width:calc(100% + 50px); height:280px; overflow-x:hidden; overflow-y:auto;}
 		.bot #response{width:340px;}
 		.bot .botReplyUser{display:block; width:calc(100% - 10px); padding:5px; border-radius:5px; background:#eee; color:#888; margin-bottom:5px;}
@@ -111,6 +152,11 @@
 </head>
 <body>
 	<div class="bot">
+		<span class='botReplyBot'>Welcome to HealthRx by Bajaj Finserv<br>
+			Hi! I am XXXX, How can I help you today?<br>
+			Choose from the menu or type your question to get started.
+		  </span>
+		  <button class='del' onclick="f('Side Effects')" value="Know about Health Card">Side Effects</button><br><button class='del' onclick="f('Product Use')">Product Use</button><br><button class='del' onclick="f('Composition')">Composition</button>
   		<div id="response-container">
   			<div id="response"></div>
 		</div>
